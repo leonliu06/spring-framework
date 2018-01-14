@@ -1,5 +1,6 @@
 buildscript {
 	repositories {
+		mavenLocal()
 		maven { url "https://repo.spring.io/plugins-release" }
 	}
 	dependencies {
@@ -8,6 +9,27 @@ buildscript {
 		classpath("io.spring.gradle:docbook-reference-plugin:0.3.1")
 		classpath("ws.antonov.gradle.plugins:gradle-plugin-protobuf:0.9.1")
 	}
+}
+
+// 3rd party plugin repositories can be configured in settings.gradle
+plugins {
+	id "com.gradle.build-scan" version "1.8"
+	id "io.spring.dependency-management" version "1.0.3.RELEASE" apply false
+	id "org.jetbrains.kotlin.jvm" version "1.2.10" apply false
+	id "org.jetbrains.dokka" version "0.9.15"
+	id "org.asciidoctor.convert" version "1.5.6"
+}
+
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'org.spring-framework'
+version = '5.0.3.BUILD-SNAPSHOT'
+sourceCompatibility = 1.8
+
+buildScan {
+	licenseAgreementUrl = 'https://gradle.com/terms-of-service'
+	licenseAgree = 'yes'
 }
 
 ext {
@@ -124,10 +146,12 @@ configure(allprojects) { project ->
 	}
 
 	repositories {
+        mavenLocal()
 		maven { url "https://repo.spring.io/libs-release" }
 	}
 
 	dependencies {
+		compile files('libs/commons-logging/commons-logging/1.2/commons-logging-1.2.jar')
 		testCompile("junit:junit:${junitVersion}") {
 			exclude group:'org.hamcrest', module:'hamcrest-core'
 		}
